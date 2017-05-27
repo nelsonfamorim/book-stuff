@@ -15,6 +15,11 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             name: 'app.conversions',
             url: '/conversions',
             templateUrl: '/components/conversions/conversionsView.html',
-            controller: 'conversionsController'
+            controller: 'conversionsController',
+            resolve: {
+                documents: function(conversionsService){
+                    return conversionsService.getDocuments();
+                }
+            }
         })
 });

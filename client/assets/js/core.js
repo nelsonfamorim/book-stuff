@@ -15,18 +15,23 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             name: 'app.conversions',
             url: '/conversions',
             templateUrl: '/components/conversions/conversionsView.html',
-            controller: 'conversionsController'
+            controller: 'conversionsController',
+            resolve: {
+                documents: function(conversionsService){
+                    return conversionsService.getDocuments();
+                }
+            }
         })
 });
-app.controller('conversionsController', function($scope) {
-    $scope.text2= "World";
+app.controller('conversionsController', function($scope, documents, conversionsService) {
+    $scope.documents=documents;
 
     $scope.convertPDF = function(){
-        alert('convert pdf');
+        conversionsService.convertFile('abc','PDF');
     }
 
     $scope.convertHTML = function(){
-        alert('convert html');
+        conversionsService.convertFile('abc','HTML');
     }
 
     $scope.updateHeaderText("Conversions");
@@ -41,6 +46,23 @@ app.controller('conversionsController', function($scope) {
             callback: $scope.convertHTML
         }
     ]);
+});
+app.factory('conversionsService', function($http){
+    var path = 'http://' +window.location.host+ '/api/conversions/';
+    var service = {
+        getDocuments: function(){
+            return $http.get(path + "getDocuments").then(function (response) {
+                return response.data;
+            });
+        },
+        convertFile: function(name,type){
+            return $http.get(path + "convertFile?name=" + name + '&type=' + type).then(function (response) {
+                return response.data;
+            });
+        } 
+    }
+
+    return service;
 });
 app.controller('RootController', function($scope) {
     $scope.headerText = "";

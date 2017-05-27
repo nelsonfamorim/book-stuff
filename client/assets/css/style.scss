@@ -1,5 +1,68 @@
-.container {
-    max-width: 1024px;
-    margin: 0px auto;
+@import '../../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap';
 
+$primary-color: #adadad;
+$background-color: #f1f1f1;
+
+.container {
+    max-width: 800px;
+    margin: 0px auto;
+    margin-top: 20px;
+    color: $primary-color;
+}
+
+.btn {
+    border-color: $primary-color;
+    background-color: $background-color;
+
+    &:hover {
+        color: $background-color;
+        background-color: $primary-color
+    }
+}
+
+.table {
+    margin-top: 10px;
+    border-collapse: separate;
+    color: $primary-color;
+
+      thead > tr>th {
+        border-top: 1px solid $primary-color !important;
+        border-bottom: 1px solid $primary-color;
+        border-left: 0px;
+        border-right: 0px;
+        color: $primary-color;
+        font-weight: 400;
+
+        &:first-child{
+            border-radius: 4px 0 0 4px;
+            border-left: 1px solid $primary-color;
+        }
+
+        &:last-child{
+            border-radius: 0 4px 4px 0;
+            border-right: 1px solid $primary-color;
+        }
+    }
+    tbody>tr>td {
+        border: 0px;
+    }
+}
+
+.section-actions {
+    margin-top: 25px;
+    margin-bottom: 10px;
+
+    input {
+        margin-left: 5px;
+        float:right;
+    }
+}
+
+.type-pill {
+    background-color: $primary-color;
+    color: $background-color;
+    padding: 3px 10px;
+    border-radius: 4px;
+    width: 70px;
+    text-align: center;
 }

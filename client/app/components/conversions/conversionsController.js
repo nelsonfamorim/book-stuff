@@ -1,12 +1,12 @@
-app.controller('conversionsController', function($scope) {
-    $scope.text2= "World";
+app.controller('conversionsController', function($scope, documents, conversionsService) {
+    $scope.documents=documents;
 
     $scope.convertPDF = function(){
-        alert('convert pdf');
+        conversionsService.convertFile('abc','PDF');
     }
 
     $scope.convertHTML = function(){
-        alert('convert html');
+        conversionsService.convertFile('abc','HTML');
     }
 
     $scope.updateHeaderText("Conversions");

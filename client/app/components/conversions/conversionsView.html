@@ -1,3 +1,29 @@
-<div>
-    {{text2}}
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created at</th>
+            <th style="width:100px">Type</th>
+            <th style="width:140px">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="document in documents">
+            <td>{{document.name}}</td>
+            <td>{{document.createdAt}}</td>
+            <td><div class="type-pill">{{document.type}}</div></td>
+            <td ng-if="document.status=='queue'">
+                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+                <span>In Queue</span>
+            </td>
+            <td ng-if="document.status=='processing'">
+                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                <span>Processing</span>
+            </td>
+            <td ng-if="document.status=='ready'">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <span>Processed</span>
+            </td>
+        </tr>
+    </tbody>
+</table>

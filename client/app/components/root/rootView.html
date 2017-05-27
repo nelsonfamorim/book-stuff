@@ -1,9 +1,9 @@
-<header>
-    <div>
+<div class="row">
+    <div class="section-title col-md-6">
         <h1>{{headerText}}</h1>
     </div>
-    <div>
-        <input ng-repeat="action in actions" type="button" value="{{action.text}}" ng-click="action.callback()">
+    <div class="section-actions col-md-6 align-right">
+        <input class="btn" ng-repeat="action in actions" type="button" value="{{action.text}}" ng-click="action.callback()">
     </div>
-</header>
+</div>
 <ui-view></ui-view>
