@@ -1,5 +1,20 @@
-var app = angular.module('app', []);
+var app = angular.module('app', ['ui.router']);
 
-app.controller('myCtrl', function($scope) {
-    $scope.text= "Hello";
+app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    $locationProvider.hashPrefix('');
+    $urlRouterProvider.otherwise('/conversions');
+
+    $stateProvider
+        .state({
+            name: 'app',
+            abstract: true,
+            templateUrl: '/components/root/rootView.html',
+            controller: 'RootController',
+        })
+        .state({
+            name: 'app.conversions',
+            url: '/conversions',
+            templateUrl: '/components/conversions/conversionsView.html',
+            controller: 'conversionsController'
+        })
 });

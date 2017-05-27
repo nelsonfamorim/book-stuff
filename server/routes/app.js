@@ -7,6 +7,4 @@ router.get('/', (req, res)=>{
     res.sendFile('index.html',options);
 });
 
-//router.use('assets', require('./assets'))
-
 module.exports = router;

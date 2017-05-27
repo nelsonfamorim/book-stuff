@@ -7,6 +7,7 @@ app.get('/', (req, res)=>{
 });
 
 app.use('/assets', express.static('./client/assets'));
+app.use('/components', express.static('./client/app/components'));
 app.use('/app', require('./server/routes/app'));
 
 app.listen(8080, () => {

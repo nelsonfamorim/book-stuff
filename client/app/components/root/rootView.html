@@ -1,0 +1,9 @@
+<header>
+    <div>
+        <h1>{{headerText}}</h1>
+    </div>
+    <div>
+        <input ng-repeat="action in actions" type="button" value="{{action.text}}" ng-click="action.callback()">
+    </div>
+</header>
+<ui-view></ui-view>
