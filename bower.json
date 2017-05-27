@@ -1,0 +1,18 @@
+{
+  "name": "question4",
+  "description": "Answer to the question 4 exercise",
+  "main": "index.js",
+  "authors": [
+    "Nelson Gonçalves"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
