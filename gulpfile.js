@@ -24,9 +24,14 @@ gulp.task('bundle-scripts', () => {
         .pipe(gulp.dest('client/assets/js/'));
 });
 
+gulp.task('copy-fonts', ()=>{
+    gulp.src(["bower_components/bootstrap-sass/assets/fonts/**/*"])
+    .pipe(gulp.dest('client/assets/fonts'))
+})
+
 gulp.task('bundle', ['bundle-libs', 'bundle-scripts']);
 
-gulp.task('build', ['bundle', 'compile-styles']);
+gulp.task('build', ['bundle', 'compile-styles', 'copy-fonts']);
 
 gulp.task('watch', ()=>{
     gulp.watch(["client/app/app.js", "client/app/components/**/*.js"], ['bundle-scripts']);
