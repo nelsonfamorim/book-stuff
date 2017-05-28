@@ -4,9 +4,9 @@ const watch = require('gulp-watch');
 const sass = require('gulp-sass');
 
 gulp.task('compile-styles', () => {
-    gulp.src(["client/assets/css/*.scss"])
+    gulp.src(["public/assets/css/*.scss"])
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest('client/assets/css'));
+        .pipe(gulp.dest('public/assets/css'));
 });
 
 gulp.task('bundle-libs', () => {
@@ -19,18 +19,18 @@ gulp.task('bundle-libs', () => {
         "bower_components/ng-sockjs/dist/ng-sockjs.min.js"
     ])
         .pipe(concat('bundle.js'))
-        .pipe(gulp.dest('client/assets/lib/'));
+        .pipe(gulp.dest('public/assets/lib/'));
 });
 
 gulp.task('bundle-scripts', () => {
-    gulp.src(["client/app/app.js", "client/app/components/**/*.js"])
+    gulp.src(["public/app/app.js", "public/app/components/**/*.js"])
         .pipe(concat('core.js'))
-        .pipe(gulp.dest('client/assets/js/'));
+        .pipe(gulp.dest('public/assets/js/'));
 });
 
 gulp.task('copy-fonts', ()=>{
     gulp.src(["bower_components/bootstrap-sass/assets/fonts/**/*"])
-    .pipe(gulp.dest('client/assets/fonts'))
+    .pipe(gulp.dest('public/assets/fonts'))
 })
 
 gulp.task('bundle', ['bundle-libs', 'bundle-scripts']);
@@ -38,6 +38,6 @@ gulp.task('bundle', ['bundle-libs', 'bundle-scripts']);
 gulp.task('build', ['bundle', 'compile-styles', 'copy-fonts']);
 
 gulp.task('watch', ()=>{
-    gulp.watch(["client/app/app.js", "client/app/components/**/*.js"], ['bundle-scripts']);
-    gulp.watch('client/assets/css/*.scss', ['compile-styles']);
+    gulp.watch(["public/app/app.js", "public/app/components/**/*.js"], ['bundle-scripts']);
+    gulp.watch('public/assets/css/*.scss', ['compile-styles']);
 });
