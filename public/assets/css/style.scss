@@ -66,3 +66,41 @@ $background-color: #f1f1f1;
     width: 70px;
     text-align: center;
 }
+
+.toast-top-right {
+    position: fixed;
+    top: 45px;
+    right: 15px;
+
+    div[toast] {
+        border: 1px solid $primary-color;
+        border-radius: 4px;
+        color: $primary-color;
+        width:300px;
+        margin-bottom: 10px;
+
+        .toast-message {
+            position: relative;
+        }
+
+        .toast-icon {
+            border-right: 1px solid $primary-color;
+            display: inline-block;
+            width: 38px;
+            span {
+                padding:7px;
+                font-size: x-large
+            }
+        }
+
+        .toast-text {
+            display: inline-block;
+            margin: 10px;
+            position: absolute;
+        }
+
+        div.row > div:last-child {
+            padding-top: 7px;
+        }
+    }
+}

@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "express": "^4.15.3",
-    "mongodb": "^2.2.27"
+    "mongodb": "^2.2.27",
+    "sockjs": "^0.3.18"
   },
   "repository": {
     "type": "git",

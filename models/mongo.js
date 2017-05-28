@@ -2,6 +2,7 @@ const client = require('mongodb').MongoClient;
 
 // Connection URL
 const url = 'mongodb://localhost:27017/DocumentConverter';
+const connectCallbacks = [];
 var connection;
 client.connect(url, function(err, db) {
     if(err != null){
@@ -10,13 +11,24 @@ client.connect(url, function(err, db) {
     }
     console.log("Connected successfully to server");
     connection=db;
+
+    while(connectCallbacks.length > 0){
+        connectCallbacks.pop()(connection);
+    }
 });
 
-const getConnection = ()=>{
+function getConnection(){
     return connection;
+}
+
+function onConnect(callback){
+    if(connection)
+        callback(connection);
+    connectCallbacks.push(callback);
 }
 
 
 module.exports = {
-    getConnection: getConnection
+    getConnection: getConnection,
+    onConnect: onConnect
 }

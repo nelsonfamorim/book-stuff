@@ -1,15 +1,25 @@
 const express = require('express');
+const sockjs  = require('sockjs');
+var http    = require('http');
+const realtime = require('./services/realtime');
+
 const app = express();
+const server = http.createServer(app);
+
+const sockjs_opts = {sockjs_url: "http://cdn.jsdelivr.net/sockjs/1.0.1/sockjs.min.js"};
+const sockjs_realtime = sockjs.createServer(sockjs_opts);
+sockjs_realtime.on('connection', function(conn) {
+    realtime.onConnection(conn);
+});
+
+sockjs_realtime.installHandlers(server, {prefix:'/realtime'});
 
 app.get('/', (req, res)=>{
-    res.sendFile('index.html', {root: './client'});
+    res.sendFile('index.html', {root: './public'});
 });
 
-app.use('/assets', express.static('./client/assets'));
-app.use('/components', express.static('./client/app/components'));
-app.use('/app', require('./server/routes/app'));
-app.use('/api',require('./server/routes/api'));
+app.use('/assets', express.static('./public/assets'));
+app.use('/components', express.static('./public/app/components'));
+app.use('/api',require('./routes/api'));
 
-app.listen(8080, () => {
-    console.log('Listening on port 8080');
-});
+server.listen(8080, '0.0.0.0');

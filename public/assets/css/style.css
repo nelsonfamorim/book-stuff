@@ -5861,3 +5861,29 @@ button.close {
   border-radius: 4px;
   width: 70px;
   text-align: center; }
+
+.toast-top-right {
+  position: fixed;
+  top: 45px;
+  right: 15px; }
+  .toast-top-right div[toast] {
+    border: 1px solid #adadad;
+    border-radius: 4px;
+    color: #adadad;
+    width: 300px;
+    margin-bottom: 10px; }
+    .toast-top-right div[toast] .toast-message {
+      position: relative; }
+    .toast-top-right div[toast] .toast-icon {
+      border-right: 1px solid #adadad;
+      display: inline-block;
+      width: 38px; }
+      .toast-top-right div[toast] .toast-icon span {
+        padding: 7px;
+        font-size: x-large; }
+    .toast-top-right div[toast] .toast-text {
+      display: inline-block;
+      margin: 10px;
+      position: absolute; }
+    .toast-top-right div[toast] div.row > div:last-child {
+      padding-top: 7px; }

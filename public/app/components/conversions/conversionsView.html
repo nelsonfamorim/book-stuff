@@ -2,15 +2,15 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Created at</th>
+            <th style="width:180px">Created at</th>
             <th style="width:100px">Type</th>
             <th style="width:140px">Status</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="document in documents">
+        <tr ng-repeat="document in documents track by $index">
             <td>{{document.name}}</td>
-            <td>{{document.createdAt}}</td>
+            <td>{{document.createdAt | date : "EEE, MMM d, h:mma"}}</td>
             <td><div class="type-pill">{{document.type}}</div></td>
             <td ng-if="document.status=='queue'">
                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>

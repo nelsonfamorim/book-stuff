@@ -12,7 +12,11 @@ gulp.task('compile-styles', () => {
 gulp.task('bundle-libs', () => {
     gulp.src([
         "bower_components/angular/angular.min.js",
-        "bower_components/angular-ui-router/release/angular-ui-router.min.js"
+        "bower_components/angular-ui-router/release/angular-ui-router.min.js",
+        "bower_components/lodash/dist/lodash.min.js",
+        "bower_components/angular-toastr/dist/angular-toastr.tpls.min.js",
+        "bower_components/sockjs/sockjs.min.js",
+        "bower_components/ng-sockjs/dist/ng-sockjs.min.js"
     ])
         .pipe(concat('bundle.js'))
         .pipe(gulp.dest('client/assets/lib/'));

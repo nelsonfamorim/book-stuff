@@ -7,7 +7,7 @@ app.factory('conversionsService', function($http){
             });
         },
         convertFile: function(name,type){
-            return $http.get(path + "convertFile?name=" + name + '&type=' + type).then(function (response) {
+            return $http.get(path + "convertFile?name=" + encodeURIComponent(name) + '&type=' + type).then(function (response) {
                 return response.data;
             });
         } 

@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router']);
+var app = angular.module('app', ['ui.router','toastr','ng.sockjs']);
 
 app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.hashPrefix('');
@@ -23,3 +23,5 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             }
         })
 });
+
+app.value('ngSockUrl', '/realtime');

@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router']);
+var app = angular.module('app', ['ui.router','toastr','ng.sockjs']);
 
 app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.hashPrefix('');
@@ -23,15 +23,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
             }
         })
 });
-app.controller('conversionsController', function($scope, documents, conversionsService) {
+
+app.value('ngSockUrl', '/realtime');
+app.controller('conversionsController', function($scope, documents, conversionsService, toastr, socket) {
     $scope.documents=documents;
 
     $scope.convertPDF = function(){
-        conversionsService.convertFile('abc','PDF');
+        var index = _.countBy(documents, 'type').PDF || 0;
+        conversionsService.convertFile('PDF #' + index++,'PDF');
     }
 
     $scope.convertHTML = function(){
-        conversionsService.convertFile('abc','HTML');
+        var index = _.countBy(documents, 'type').HTML || 0;
+        conversionsService.convertFile('HTML #' + index++,'HTML');
     }
 
     $scope.updateHeaderText("Conversions");
@@ -46,6 +50,44 @@ app.controller('conversionsController', function($scope, documents, conversionsS
             callback: $scope.convertHTML
         }
     ]);
+
+    showToast = function(text, icon){
+        toastr.info('<div class="toast-message">' +
+                    '<div class="toast-icon"><span class="glyphicon glyphicon-'+icon+'" aria-hidden="true"></div>'+
+                    '<div class="toast-text"><span>'+text+'</span></div>'+
+                '</div>', null, {
+                    timeOut: 5000,
+                    allowHtml: true
+                });
+    }
+
+    socket.onOpen(function(){
+        console.log('Socket Established');
+    });
+
+    socket.onMessage(function(data){
+        var index = _.findIndex($scope.documents, {_id: data._id});
+        if(index>-1)
+            $scope.documents.splice(index, 1, data);
+        else
+            $scope.documents.push(data);
+        var text, icon;
+        switch(data.status){
+            case "queue":
+                text = 'Request ' + data.name + ' queued.';
+                icon = 'info-sign';
+                break;
+            case "processing":
+                text = 'Request ' + data.name + ' is processing.';
+                icon = 'repeat';
+                break;
+            case "ready":
+                text = 'Request ' + data.name + ' is processed.';
+                icon = 'ok';
+                break;
+        }
+        showToast(text, icon);
+    });
 });
 app.factory('conversionsService', function($http){
     var path = 'http://' +window.location.host+ '/api/conversions/';
@@ -56,7 +98,7 @@ app.factory('conversionsService', function($http){
             });
         },
         convertFile: function(name,type){
-            return $http.get(path + "convertFile?name=" + name + '&type=' + type).then(function (response) {
+            return $http.get(path + "convertFile?name=" + encodeURIComponent(name) + '&type=' + type).then(function (response) {
                 return response.data;
             });
         } 
