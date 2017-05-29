@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const concat = require('gulp-concat');
 const watch = require('gulp-watch');
 const sass = require('gulp-sass');
+const mocha = require('gulp-mocha');
 
 gulp.task('compile-styles', () => {
     gulp.src(["public/assets/css/*.scss"])
@@ -36,6 +37,12 @@ gulp.task('copy-fonts', ()=>{
 gulp.task('bundle', ['bundle-libs', 'bundle-scripts']);
 
 gulp.task('build', ['bundle', 'compile-styles', 'copy-fonts']);
+
+gulp.task('test', ['build'], ()=>{
+    gulp.src(['test/*.spec.js'], {read: false})
+		// `gulp-mocha` needs filepaths so you can't have any plugins before it
+		.pipe(mocha({reporter: 'spec'}))
+});
 
 gulp.task('watch', ()=>{
     gulp.watch(["public/app/app.js", "public/app/components/**/*.js"], ['bundle-scripts']);

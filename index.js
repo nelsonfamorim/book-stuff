@@ -23,3 +23,5 @@ app.use('/components', express.static('./public/app/components'));
 app.use('/api',require('./routes/api'));
 
 server.listen(8080, '0.0.0.0');
+
+module.exports = server;
