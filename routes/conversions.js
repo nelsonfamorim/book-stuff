@@ -31,9 +31,7 @@ router.get('/convertFile', (req,res)=>{
     mongo.getConnection().collection('convertions')
         .insertOne(document).then((response)=>{
             res.send();
-            document.type == 'HTML' ?
-                jobRunner.queueHTML(generateJob(document)) :
-                jobRunner.queuePDF(generateJob(document));
+            jobRunner.queueJob(generateJob(document));
             realtime.broadcast(JSON.stringify(document));
         },()=>{
             res.statusCode = 500;
@@ -42,20 +40,23 @@ router.get('/convertFile', (req,res)=>{
 });
 
 function generateJob(doc){
-    return (cb)=>{
-        const collection = mongo.getConnection().collection('convertions');
-            collection.findOneAndUpdate({_id: doc._id}, {$set: {status:'processing'}}, {returnOriginal: false})
-            .then(function(result) {
+    return {
+        run :(cb)=>{
+            const collection = mongo.getConnection().collection('convertions');
+                collection.findOneAndUpdate({_id: doc._id}, {$set: {status:'processing'}}, {returnOriginal: false})
+                .then(function(result) {
 
-                realtime.broadcast(JSON.stringify(result.value));
-            });
-        setTimeout(()=>{
-            collection.findOneAndUpdate({_id: doc._id}, {$set: {status:'ready'}}, {returnOriginal: false})
-            .then(function(result) {
-                realtime.broadcast(JSON.stringify(result.value));
-            });
-            cb();
-        },doc.type == 'PDF' ? 100000 : 10000);
+                    realtime.broadcast(JSON.stringify(result.value));
+                });
+            setTimeout(()=>{
+                collection.findOneAndUpdate({_id: doc._id}, {$set: {status:'ready'}}, {returnOriginal: false})
+                .then(function(result) {
+                    realtime.broadcast(JSON.stringify(result.value));
+                });
+                cb();
+            },doc.type == 'PDF' ? 100000 : 10000);
+        },
+        type: doc.type
     }
 }
 
@@ -68,9 +69,7 @@ mongo.onConnect((conn)=>{
             if(err)
                 return;
             docs.forEach((document)=> {
-                document.type == 'HTML' ?
-                jobRunner.queueHTML(generateJob(document)) :
-                jobRunner.queuePDF(generateJob(document))
+                 jobRunner.queueJob(generateJob(document));
             });
         });
 });

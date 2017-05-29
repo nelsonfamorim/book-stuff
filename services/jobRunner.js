@@ -1,53 +1,67 @@
-
-const htmlQueue = [];
-const pdfQueue = [];
-//the number of times a given pdf document can be deprioritized of a html one
-const basePriorityTolerance = 3;
-var priorityTolerance = basePriorityTolerance;
+var queue = [];
+const lookahead = 5;
+var enablePrioritization = true;
 var jobRunning = false;
 
-var executeJob = () =>{
+function pickJob(){
+    //if no jobs, reset prioritization and return null
+    if(queue.length == 0){
+        enablePrioritization = true;
+        return;
+    }
+
+    if(enablePrioritization && queue[0].type == 'PDF'){
+        //each PDF can only lose its priority once
+        enablePrioritization = false;
+
+        var i=0;
+        //alow the next sequence of html documents to be prioritized
+        //max number of document is 'lookahead' value
+        while(i<lookahead){
+            if(!queue[i+1] ||queue[i+1].type=='PDF')
+                break;
+            i++;
+        }
+
+        //swap the html documents to the head of the queue
+        if(i>0){
+            var htmlJobs = queue.splice(1,i);
+            queue = htmlJobs.concat(queue);
+        }
+
+    }
+
+    var job = queue.shift();
+    if(job.type == 'PDF')
+        enablePrioritization = true;
+    
+    return job;
+}
+
+function executeJob(){
+
+    var job = pickJob();
+
+
     //nothing to run case
-    if(htmlQueue.length == 0 && pdfQueue.length == 0){
+    if(!job){
         jobRunning = false;
         return;
     }
 
     //signal as running
     jobRunning = true;
-    var job;
-
-    //if there are pdf documents run them if:
-    //there are no html documents to process
-    //the pdf document has no more tolerance to be skipped
-    if(pdfQueue.length > 0 && (htmlQueue.length == 0 || priorityTolerance == 0)){
-        //pdf document is being processed, restore tolerance
-        priorityTolerance = basePriorityTolerance;
-        job = pdfQueue.shift();
-    } else {
-        //if there is a pdf document waiting, reduce tolerance
-        if(pdfQueue.length != 0)
-            priorityTolerance--;
-        job = htmlQueue.shift();
-    }
     //run the job and add this function as a callback to be called when the job is over
-    job(executeJob);
+    job.run(executeJob);
 }
 
-var queuePDF = function(job){
-    pdfQueue.push(job);
-    if(!jobRunning)
-        executeJob();
-}
-
-var queueHTML = function(job){
-    htmlQueue.push(job);
+function queueJob(job){
+    queue.push(job);
     if(!jobRunning)
         executeJob();
 }
 
 module.exports = {
-    queuePDF: queuePDF,
-    queueHTML: queueHTML
+    queueJob: queueJob
 }
 
