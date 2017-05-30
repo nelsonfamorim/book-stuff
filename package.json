@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "build": "npm run bower install | npm run gulp build",
+    "build-windows": "npm run bower install & npm run gulp build",
     "bower": "bower",
     "gulp": "gulp"
   },
